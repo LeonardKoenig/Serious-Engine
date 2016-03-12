@@ -31,3 +31,7 @@
 
 # CMake Build dirs (temp)
 Build/
+
+# generated files:
+Sources/Engine/Ska/smcPars.cpp
+Sources/Ecc/Scanner.cpp
