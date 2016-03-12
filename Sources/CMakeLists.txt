@@ -1,17 +1,26 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 PROJECT(SeriousEngine)
 
+IF (CMAKE_COMPILER_IS_GNUCXX)
+	SET (GNUCXX_FLAGS -DPLATFORM_UNIX=1 -D_MT=1 -std=c++11 -fpermissive)
+ELSE (CMAKE_COMPILER_IS_GNUCXX)
+	SET (MSVC_FLAGS /D_CRT_SECURE_NO_WARNINGS /MT)
+ENDIF (CMAKE_COMPILER_IS_GNUCXX)
+
+
 # FIXME: Don't define UNIX for Windows projects
 IF (${CMAKE_VERSION} VERSION_GREATER 2.8.11)
-	add_compile_options (-DPLATFORM_UNIX=1 -D_MT=1 -std=c++11 -fpermissive)
+	add_compile_options (${GNUCXX_FLAGS} ${MSVC_FLAGS})
 ELSE(${CMAKE_VERSION} VERSION_GREATER 2.8.11)
-	ADD_DEFINITIONS (-DPLATFORM_UNIX=1 -D_MT=1 std=c++11 -fpermissive)
+	ADD_DEFINITIONS (${GNUCXX_FLAGS} ${MSVC_FLAGS})
 ENDIF(${CMAKE_VERSION} VERSION_GREATER 2.8.11)
 
 # Looks like the engine depends on these projects at some point.
 # FIXME: For Windows, these are in Tools.Win32
-FIND_PACKAGE(BISON REQUIRED)
-FIND_PACKAGE(FLEX REQUIRED)
+if (NOT WIN32)
+	FIND_PACKAGE(BISON REQUIRED)
+	FIND_PACKAGE(FLEX REQUIRED)
+endif (NOT WIN32)
 
 # FIXME: Also execute Ecc on .es files to generate the corresponding sources.
 ADD_SUBDIRECTORY("Ecc")
