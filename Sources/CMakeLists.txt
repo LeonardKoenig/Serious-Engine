@@ -1,13 +1,11 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 PROJECT(SeriousEngine)
 
-ADD_DEFINITIONS(-DPLATFORM_UNIX=1)
-ADD_DEFINITIONS(-D_MT=1)
-
+# FIXME: Don't define UNIX for Windows projects
 IF (${CMAKE_VERSION} VERSION_GREATER 2.8.11)
-	add_compile_options (-std=c++11 -fpermissive)
+	add_compile_options (-DPLATFORM_UNIX=1 -D_MT=1 -std=c++11 -fpermissive)
 ELSE(${CMAKE_VERSION} VERSION_GREATER 2.8.11)
-	ADD_DEFINITIONS (-std=c++11 -fpermissive)
+	ADD_DEFINITIONS (-DPLATFORM_UNIX=1 -D_MT=1 std=c++11 -fpermissive)
 ENDIF(${CMAKE_VERSION} VERSION_GREATER 2.8.11)
 
 # Looks like the engine depends on these projects at some point.
@@ -15,6 +13,7 @@ ENDIF(${CMAKE_VERSION} VERSION_GREATER 2.8.11)
 FIND_PACKAGE(BISON REQUIRED)
 FIND_PACKAGE(FLEX REQUIRED)
 
+# FIXME: Also execute Ecc on .es files to generate the corresponding sources.
 ADD_SUBDIRECTORY("Ecc")
 
 # There are some things we currently can't build because of WinAPI dependencies
