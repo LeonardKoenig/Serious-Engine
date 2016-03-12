@@ -576,13 +576,13 @@ __forceinline BOOL Vector<Type, iDimensions>::operator!=(const Vector<Type, iDim
 
 
 // helper functions for converting between FLOAT and DOUBLE vectors
-template<>
+//template<>
 __forceinline DOUBLE3D FLOATtoDOUBLE(const FLOAT3D &vf)
 {
   return DOUBLE3D(FLOATtoDOUBLE(vf(1)), FLOATtoDOUBLE(vf(2)), FLOATtoDOUBLE(vf(3)));
 }
 
-template<>
+//template<>
 __forceinline FLOAT3D DOUBLEtoFLOAT(const DOUBLE3D &vd)
 {
   return FLOAT3D(DOUBLEtoFLOAT(vd(1)), DOUBLEtoFLOAT(vd(2)), DOUBLEtoFLOAT(vd(3)));
