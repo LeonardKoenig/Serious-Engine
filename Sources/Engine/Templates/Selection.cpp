@@ -79,7 +79,11 @@ void CSelection<cType, ulFlag>::Clear(void)
   // for all objects in the container
   FOREACHINDYNAMICCONTAINER(*this, cType, itObject) {
     // object must be allocated and valid
+#ifdef _WIN32
     ASSERT(_CrtIsValidPointer(&*itObject, sizeof(cType), TRUE));
+#else
+#warning "FIXME: _CrtIsValidPointer"
+#endif //FIXME
 /*    ASSERT(_CrtIsValidHeapPointer(&*itObject));
     ASSERT(_CrtIsMemoryBlock(&*itObject, sizeof(cType), NULL, NULL, NULL ));
     */
