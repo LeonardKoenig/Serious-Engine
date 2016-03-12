@@ -4,7 +4,11 @@ PROJECT(SeriousEngine)
 ADD_DEFINITIONS(-DPLATFORM_UNIX=1)
 ADD_DEFINITIONS(-D_MT=1)
 
-SET (CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -std=c++11)
+IF (${CMAKE_VERSION} VERSION_GREATER 2.8.11)
+	add_compile_options (-std=c++11 -fpermissive)
+ELSE(${CMAKE_VERSION} VERSION_GREATER 2.8.11)
+	ADD_DEFINITIONS (-std=c++11 -fpermissive)
+ENDIF(${CMAKE_VERSION} VERSION_GREATER 2.8.11)
 
 # Looks like the engine depends on these projects at some point.
 # FIXME: For Windows, these are in Tools.Win32
