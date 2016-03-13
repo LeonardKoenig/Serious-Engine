@@ -6,8 +6,11 @@ ENDIF()
 FIND_PACKAGE(BISON REQUIRED)
 FIND_PACKAGE(FLEX REQUIRED)
 
+# -d is implicit:
+# "A header file is also be generated, and contains the token list."
 BISON_TARGET(Parser Parser.y ${CMAKE_CURRENT_BINARY_DIR}/Parser.cpp)
 FLEX_TARGET(Scanner Scanner.l ${CMAKE_CURRENT_BINARY_DIR}/Scanner.cpp)
+ADD_FLEX_BISON_DEPENDENCY(Scanner Parser)
 
 
 FILE(GLOB_RECURSE ECC_INCLUDES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.h")

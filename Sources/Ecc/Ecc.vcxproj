@@ -171,12 +171,13 @@ copy Debug\%(Filename).map $(SolutionDir)..\Bin\ &gt;nul</Command>
     <CustomBuild Include="Parser.y">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pushd $(SolutionDir)
-bison -o$(ProjectName)/Parser.c $(ProjectName)/Parser.y -d  
+bison -o$(ProjectName)/Parser.c $(ProjectName)/Parser.y -d
 popd
+copy %(RootDir)%(Directory)\Parser.h %(RootDir)%(Directory)\Parser.hpp  
 copy %(RootDir)%(Directory)\Parser.c %(RootDir)%(Directory)\Parser.cpp  
 del %(RootDir)%(Directory)\Parser.c /q</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Creating parser source</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)\Parser.cpp;%(RootDir)%(Directory)\Parser.h;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)\Parser.cpp;%(RootDir)%(Directory)\Parser.hpp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">pushd $(SolutionDir)
 bison -o$(ProjectName)/Parser.c $(ProjectName)/Parser.y -d  
 popd
