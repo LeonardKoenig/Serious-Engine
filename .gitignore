@@ -47,6 +47,8 @@ Data/SeriousSam.gms
 # generated files:
 Sources/Engine/Ska/smcPars.cpp
 Sources/Ecc/Scanner.cpp
+Sources/Ecc/Parser.cpp
+Sources/Ecc/Parser.h
 
 Sources/EntitiesMP/*.h
 Sources/EntitiesMP/*.cpp
