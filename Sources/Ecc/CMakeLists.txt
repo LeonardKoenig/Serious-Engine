@@ -8,6 +8,7 @@ FIND_PACKAGE(FLEX REQUIRED)
 
 # -d is implicit:
 # "A header file is also be generated, and contains the token list."
+MAKE_DIRECTORY(${CMAKE_CURRENT_BINARY_DIR}/Ska})
 BISON_TARGET(Parser Parser.y ${CMAKE_CURRENT_BINARY_DIR}/Parser.cpp)
 FLEX_TARGET(Scanner Scanner.l ${CMAKE_CURRENT_BINARY_DIR}/Scanner.cpp)
 ADD_FLEX_BISON_DEPENDENCY(Scanner Parser)
@@ -20,7 +21,9 @@ FILE(GLOB ECC_SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cpp")
 
 INCLUDE_DIRECTORIES ("../")
 # we need that for Windows as Flex is auto-generating a system-<unistd.h> include.
-INCLUDE_DIRECTORIES (AFTER SYSTEM "./")
+IF(WIN32)
+	INCLUDE_DIRECTORIES (AFTER SYSTEM "./")
+ENDIF()
 # add Parser stuff manually as it is generated and therefor possibly not in glob
 ADD_EXECUTABLE (Ecc
 	${ECC_SOURCES} ${ECC_INCLUDES} ${BISON_Parser_OUTPUTS} ${FLEX_Parser_OUTPUTS})

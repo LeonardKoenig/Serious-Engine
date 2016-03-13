@@ -2,7 +2,7 @@
 // rcg10042001 Changed to specify Ecc directory...
 #include "Ecc/StdH.h"
 #include "Ecc/Main.h"
-#include "Ecc/Parser.hpp"
+#include "Parser.hpp"
 
 #define YY_NEVER_INTERACTIVE 1
 
