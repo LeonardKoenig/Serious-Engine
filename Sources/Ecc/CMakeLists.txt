@@ -1,22 +1,24 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
-PROJECT(Ecc)
 
-FILE(GLOB_RECURSE ECC_INCLUDES "*.h")
+IF(WIN32)
+	SET(CMAKE_PROGRAM_PATH ${PROJECT_SOURCE_DIR}/../Tools.Win32)
+ENDIF()
+FIND_PACKAGE(BISON REQUIRED)
+FIND_PACKAGE(FLEX REQUIRED)
+
+BISON_TARGET(Parser Parser.y ${CMAKE_CURRENT_BINARY_DIR}/Parser.cpp)
+FLEX_TARGET(Scanner Scanner.l ${CMAKE_CURRENT_BINARY_DIR}/Scanner.cpp)
+
+
+FILE(GLOB_RECURSE ECC_INCLUDES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.h")
 # no recursing, as we then also add CMAKE-cpp stuff which we don't want.
 # this also would break the build as we'd have multiple main symbols.
-FILE(GLOB ECC_SOURCES "*.cpp")
+FILE(GLOB ECC_SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cpp")
 
 INCLUDE_DIRECTORIES ("../")
+# we need that for Windows as Flex is auto-generating a system-<unistd.h> include.
+INCLUDE_DIRECTORIES (AFTER SYSTEM "./")
 # add Parser stuff manually as it is generated and therefor possibly not in glob
-ADD_EXECUTABLE (Ecc ${ECC_SOURCES} Parser.cpp Scanner.cpp ${ECC_INCLUDES} Parser.h)
+ADD_EXECUTABLE (Ecc
+	${ECC_SOURCES} ${ECC_INCLUDES} ${BISON_Parser_OUTPUTS} ${FLEX_Parser_OUTPUTS})
 
-
-
-
-# use bison to generate Parser.h/.cpp
-
-ADD_CUSTOM_COMMAND(OUTPUT Parser.cpp Scanner.cpp Parser.h
-	COMMAND ${BISON_EXECUTABLE} -o ${CMAKE_CURRENT_SOURCE_DIR}/Parser.c ${CMAKE_CURRENT_SOURCE_DIR}/Parser.y -d
-	COMMAND mv ${CMAKE_CURRENT_SOURCE_DIR}/Parser.c ${CMAKE_CURRENT_SOURCE_DIR}/Parser.cpp
-	COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/Parser.cpp ${CMAKE_CURRENT_BINARY_DIR}/Parser.cpp
-	COMMAND ${FLEX_EXECUTABLE} -o ${CMAKE_CURRENT_SOURCE_DIR}/Scanner.cpp ${CMAKE_CURRENT_SOURCE_DIR}/Scanner.l)
