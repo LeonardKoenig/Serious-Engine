@@ -26,30 +26,6 @@ endif (NOT WIN32)
 ADD_SUBDIRECTORY("Ecc")
 
 
-# Create a temporary blacklist of non-functional ES files
-SET(BLACKLISTED_ES "ParticleCloudsMarker.es;ParticleCloudsHolder.es")
-
-FILE(GLOB_RECURSE ES_SOURCES "./*.es")
-
-
-ADD_CUSTOM_TARGET(ECC_HEADERS
-	ALL
-	DEPENDS Ecc)
-
-FOREACH(FILE ${ES_SOURCES})
-    GET_FILENAME_COMPONENT(FILE ${FILE} ABSOLUTE)
-
-    # Check the black list
-    GET_FILENAME_COMPONENT(FILENAME ${FILE} NAME)
-    LIST(FIND BLACKLISTED_ES ${FILENAME} FILELOCATION)
-
-    IF (${FILELOCATION} EQUAL -1)
-	    ADD_CUSTOM_COMMAND(TARGET ECC_HEADERS POST_BUILD
-            COMMAND $<TARGET_FILE:Ecc> ${FILE})
-    ENDIF()
-ENDFOREACH()
-
-
 
 # There are some things we currently can't build because of WinAPI dependencies
 IF (WIN32)
@@ -62,6 +38,10 @@ IF (WIN32)
 ENDIF(WIN32)
 
 ADD_SUBDIRECTORY("Engine")
+ADD_SUBDIRECTORY("EntitiesMP")
+
+# EntitiesMP uses eg. BaseEvents.h from Engine
+ADD_DEPENDENCIES(EntitiesMP Engine)
 
 ADD_SUBDIRECTORY("Depend")
 ADD_SUBDIRECTORY("GameMP")
